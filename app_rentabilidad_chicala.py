@@ -27,7 +27,16 @@ if uploaded_cronograma:
         df_filtered["Costo por día"] = df_filtered["Costo ($)"] / df_filtered["Duración (días)"]
 
         st.success("✅ Cronograma cargado correctamente.")
-        st.dataframe(df_filtered.head())
+
+        # Mostrar tabla completa
+        st.subheader("📋 Tabla completa de actividades cargadas")
+        codigos = df_filtered["Codigo"].dropna().unique().tolist()
+        codigo_seleccionado = st.selectbox("Selecciona un código de actividad:", ["Todos"] + codigos)
+
+        if codigo_seleccionado == "Todos":
+            st.dataframe(df_filtered)
+        else:
+            st.dataframe(df_filtered[df_filtered["Codigo"] == codigo_seleccionado])
 
         # Expandir a diario
         cost_per_day_data = []
